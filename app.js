@@ -32,6 +32,12 @@ app.use(
 );
 
 
+app.use(
+  "/user",
+  express.urlencoded({ extended: false }),
+  [usersRouter]
+);
+
 app.listen(port,()=>{
     console.log(`${port}번 포트로 서버가 열렸습니다.`)
 })
