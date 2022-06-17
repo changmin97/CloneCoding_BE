@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 // mongoose.Schema.Types.String.checkRequired((v) => v != null)
 
+
 const { Schema } = mongoose; 
 const postSchema = new Schema({
      postId: { type: Number, required: true, }, 
@@ -8,6 +9,8 @@ const postSchema = new Schema({
      content : { type: String, required: true }, 
      imageUrl : { type: String, required: true }, 
      createAt : { type: Date, default: Date.now() } 
+
+
 });
 
 

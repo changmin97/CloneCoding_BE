@@ -15,6 +15,10 @@ const { Schema } = mongoose;
     comment : {
         type: String,
         required: true
+    },
+    createAt:{
+      type: Date,
+      default: Date.now
     }
 });
 
