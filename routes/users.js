@@ -39,8 +39,23 @@ router.post("/signup", async (req, res) => {
 });
 
 // 로그인
-router.post("/login", async (req, res) => {
+router.post("/login", authMiddleware, async (req, res) => {
+    const { email, password } = req.body;
 
+    const user = await User.findOne({ email });
+
+    if (!user || password !== user.password) {
+        res.status(400).send({
+            errorMessage: "이메일 또는 패스워드가 틀렸습니다.",
+            result: false,
+        });
+        return;
+    }
+
+    res.send({
+        token: jwt.sign({ userId: user.userId }, process.env.SECRET_KEY),
+        result: true,
+    });
 });
 
 module.exports = router;
