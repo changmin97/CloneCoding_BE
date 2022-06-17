@@ -4,6 +4,7 @@ const User = require("../schemas/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
+const bcrypt = require("bcrypt");
 //필요한 스키마 연결해주세요
 
 // 회원가입 조건
@@ -28,7 +29,8 @@ router.post("/signup", async (req, res) => {
             return;
         }
 
-        const user = new User({ email, nickname, password });
+        const hashedPassword = await bcrypt.hash(password, 10);  // 비밀번호 암호화
+        const user = new User({ email, nickname, password: hashedPassword });
         await user.save();
 
         res.status(201).send({
