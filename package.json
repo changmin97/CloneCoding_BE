@@ -14,7 +14,6 @@
   "version": "1.0.0",
   "description": "clone coding",
   "main": "app.js",
-  "devDependencies": {},
   "scripts": {
     "test": "clone coding",
     "start": "nodemon app"
