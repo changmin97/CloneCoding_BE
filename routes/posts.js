@@ -9,9 +9,9 @@ const user = require("../schemas/user");
 router.get("/main", (req, res) => {
   res.json({ result: true });
 });
+
 // 게시물 조회 메인
 router.get("/post", authMiddleware, async (req, res, next) => {
-  const user = res.locals.user; //안쓰는데 왜 넣으셨어요 =ㅛ= 
   try {
     const posts = await Post.find({}).sort({ createAt: -1 });
     res.send(posts);
@@ -19,23 +19,27 @@ router.get("/post", authMiddleware, async (req, res, next) => {
     res.status(500).json({ success: false, errorMessage: "실패했습니다." }); //message로 통일해주세용~ㅛ~
   }
 });
+
 // 게시물 상세 조회 메인 상세
-router.get("/post/postdetail/:postId", authMiddleware, async (req, res, next) => {
-  try {
-    const { postId } = req.params;
-    const postDetail = await Post.findOne({postId});
-    const existcomments = await Comment.find({ postId })
-    return res.status(200).json({ postDetail, existcomments });
-    
-  } catch (error) {
-    res.status(400).json({ success: false, errorMessage: "실패했습니다." });
+router.get(
+  "/post/postdetail/:postId",
+  authMiddleware,
+  async (req, res, next) => {
+    try {
+      const { postId } = req.params;
+      const postDetail = await Post.findOne({ postId });
+      const existcomments = await Comment.find({ postId });
+      return res.status(200).json({ postDetail, existcomments });
+    } catch (error) {
+      res.status(400).json({ success: false, errorMessage: "실패했습니다." });
+    }
   }
-});
+);
 
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
-  const {nickname} = res.locals.user
-  const { title, content, imageUrl } = req.body
+  const { nickname } = res.locals.user;
+  const { title, content, imageUrl } = req.body;
   const maxPostId = await Post.findOne().sort("-postId");
   let postId = 1;
   if (maxPostId) {
@@ -50,27 +54,33 @@ router.post("/post/upload", authMiddleware, async (req, res) => {
   });
   res.json({ post: createdPost });
 });
-//게시글 수정
-router.put('/post/postdetail/edit/:postId',authMiddleware, async(req,res)=>{
-    const postId = Number(req.params.postId)
-    const [existPost] = await Post.find({ postId })
-    const {user} = res.locals
-    const {title, content, imageUrl } = req.body
-    console.log("user.nickname 정보입니다.",user.nickname,)
-    console.log("existPost.nick 정보입니다.",existPost.nickname)
-    console.log(existPost)
-    if(user.nickname !== existPost.nickname){
-        return res.status(400).json({ result : false, message : "본인의 게시글만 수정 가능합니다."})
-    }
-    if(!content||!title||!imageUrl){
-      return res.status(400).json({ result: false, message : "빈값을 채워주세요" })
-    }
-    
-    await Post.updateOne({postId}, {$set: {title, content, imageUrl} } )
-    return res.status(200).json({ result: true })
-    //여기도 merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 기여운창민아,
 
-})
+//게시글 수정
+router.put(
+  "/post/postdetail/edit/:postId",
+  authMiddleware,
+  async (req, res) => {
+    const postId = Number(req.params.postId);
+    const [existPost] = await Post.find({ postId });
+    const { user } = res.locals;
+    const { title, content, imageUrl } = req.body;
+    
+    if (user.nickname !== existPost.nickname) {
+      return res
+        .status(400)
+        .json({ result: false, message: "본인의 게시글만 수정 가능합니다." });
+    }
+    if (!content || !title || !imageUrl) {
+      return res
+        .status(400)
+        .json({ result: false, message: "빈값을 채워주세요" });
+    }
+
+    await Post.updateOne({ postId }, { $set: { title, content, imageUrl } });
+    return res.status(200).json({ result: true });
+    //여기도 merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 기여운창민아,
+  }
+);
 
 // 게시물 삭제
 router.delete(
@@ -102,24 +112,21 @@ router.delete(
 // 게시물 검색
 router.get("/post/search/:word", authMiddleware, async (req, res, next) => {
   const { word } = req.params;
-  const { title, content, imageUrl } = req.body;
+  const { title } = req.body;
+  let postArr = [];
+  let posts = await Post.find({ title });
+  for (let i in posts) {
+    postArr.push(posts[i]);
+  };
   try {
-    if (word === "") {
-      const posts = await Post.findAll({});
-      return res.status(200).json(posts);
-    }
-    if (word.includes(title)) {
-      const posts = await Post.findAll({
-        title,
-        content,
-        imageUrl,
+    if (postArr.includes(word)) {
+      return res.status(200).send({
+        postArr
       });
-      res.status(200).json(posts);
     }
   } catch (error) {
-    return res
-      .status(400)
-      .json({ success: false, errorMessage: "실패했습니다." });
+    console.log(error);
+    return res.status(400).json({ success: false, Message: "실패했습니다." });
   }
 });
 

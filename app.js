@@ -4,7 +4,6 @@ const app = express();
 const port = process.env.port;
 const cors = require('cors');
 const connect = require("./schemas/index.js");
-
 const morgan = require('morgan');
 const helmet = require('helmet');
 connect();
@@ -31,12 +30,6 @@ app.use(
   [usersRouter]
 );
 
-
-app.use(
-  "/user",
-  express.urlencoded({ extended: false }),
-  [usersRouter]
-);
 
 app.listen(port,()=>{
     console.log(`${port}번 포트로 서버가 열렸습니다.`)
