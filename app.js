@@ -1,11 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = process.env.port
+const port = process.env.port;
 const cors = require('cors');
 const connect = require("./schemas/index.js");
-const morgan = require('morgan')
-const helmet = require('helmet')
+const morgan = require('morgan');
+const helmet = require('helmet');
 
 connect();
 //라우터
@@ -23,9 +23,14 @@ app.use(
   "/api",
   express.urlencoded({ extended: false }),
   [postsRouter],
-  [usersRouter],
   [commentsRouter]
 );
+app.use(
+  "/user",
+  express.urlencoded({ extended: false }),
+  [usersRouter]
+);
+
 
 app.listen(port,()=>{
     console.log(`${port}번 포트로 서버가 열렸습니다.`)

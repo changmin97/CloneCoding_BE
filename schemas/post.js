@@ -1,28 +1,39 @@
 const mongoose = require("mongoose")
+// mongoose.Schema.Types.String.checkRequired((v) => v != null)
 
-const { Schema } = mongoose;
-  const postSchema = new Schema({
-    postId: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    product: {
-        type: String,
-        required: true
-    },
-    nickname : {
-        type: String
-    },
-    content : {
-        type: String,
-        required: true
-    },
-    image : {
-      type: String,
-      required: true
-    }
+const { Schema } = mongoose; 
+const postSchema = new Schema({
+     postId: { type: Number, required: true, }, 
+     title: { type: String, required: true }, 
+     content : { type: String, required: true }, 
+     imageUrl : { type: String, required: true }, 
+     createAt : { type: Date, default: Date.now() } 
 });
 
-//적절하게 수정하신후 이문구 지워주세요
+
+// const { Schema } = mongoose;
+//   const postSchema = new Schema({
+//     postId: {
+//         type: Number,
+//         required: true,
+//         unique: true
+//     },
+//     title: {
+//         type: String,
+//         required: true
+//     },
+//     content : {
+//         type: String,
+//         required: true
+//     },
+//     imageUrl : {
+//       type: String,
+//       required: true
+//     },
+//     createAt: {
+//         type: Date, 
+//         default: Date.now
+//     }
+// });
+
 module.exports = mongoose.model("Post", postSchema);

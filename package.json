@@ -8,5 +8,27 @@
     "mongoose": "^6.3.8",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.16"
-  }
+  },
+  "name": "clonecoding_be",
+  "version": "1.0.0",
+  "description": "clone coding",
+  "main": "app.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "clone coding",
+    "start": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/changmin97/CloneCoding_BE.git"
+  },
+  "keywords": [
+    "clone"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/changmin97/CloneCoding_BE/issues"
+  },
+  "homepage": "https://github.com/changmin97/CloneCoding_BE#readme"
 }
