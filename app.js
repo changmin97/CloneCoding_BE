@@ -23,8 +23,13 @@ app.use(
   "/api",
   express.urlencoded({ extended: false }),
   [postsRouter],
-  [usersRouter],
   [commentsRouter]
+);
+
+app.use(
+  "/user",
+  express.urlencoded({ extended: false }),
+  [usersRouter]
 );
 
 app.listen(port,()=>{
