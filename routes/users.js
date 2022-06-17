@@ -4,8 +4,15 @@ const User = require("../schemas/user");
 const Post = require("../schemas/post");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authmiddleware.js");
-//필요한 스키마 연결해주세요
+const jwt = require("jsonwebtoken");
 
+//피드백:1 조건부족 이메일형식아닐때 "이메일 형식이아닙니다." / 길이, 2 return 넣기
+// 3 jsonwebtoken 모듈안쓰심 4 안쓰는 스키마 지움
+
+//생각해보니까 아이디 중복,닉네임중복 라우터 따로 만들어야함
+//잘 작동합니다 bb
+
+//이제 암호화 해주시면 될것같습니다! bcrypt 쓰는법
 // 회원가입
 router.post("/signup", async (req, res) => {
     const { email, nickname, password, passwordCheck } = req.body;

@@ -11,15 +11,16 @@ router.get("/main", (req, res) => {
 });
 // 게시물 조회 메인
 router.get("/post", authMiddleware, async (req, res, next) => {
-  const user = res.locals.user;
+  const user = res.locals.user; //안쓰는데 왜 넣으셨어요 =ㅛ= 
   try {
     const posts = await Post.find({}).sort({ createAt: -1 });
     res.send(posts);
   } catch (error) {
-    res.status(500).json({ success: false, errorMessage: "실패했습니다." });
+    res.status(500).json({ success: false, errorMessage: "실패했습니다." }); //message로 통일해주세용~ㅛ~
   }
 });
 // 게시물 상세 조회 메인 상세
+<<<<<<< HEAD
 router.get(
   "/post/postdetail/:postId",
   authMiddleware,
@@ -33,12 +34,24 @@ router.get(
     } catch (error) {
       res.status(400).json({ success: false, errorMessage: "실패했습니다." });
     }
+=======
+router.get("/post/postdetail/:postId", authMiddleware, async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const postDetail = await Post.findOne({postId});
+    const existcomments = await Comment.find({ postId })
+    return res.status(200).json({ postDetail, existcomments });
+    
+  } catch (error) {
+    res.status(400).json({ success: false, errorMessage: "실패했습니다." });
+>>>>>>> origin/Newchangmin
   }
 );
 
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
-  const { title, content, imageUrl } = req.body;
+  const {nickname} = res.locals.user
+  const { title, content, imageUrl } = req.body
   const maxPostId = await Post.findOne().sort("-postId");
   let postId = 1;
   if (maxPostId) {
@@ -49,30 +62,31 @@ router.post("/post/upload", authMiddleware, async (req, res) => {
     title,
     content,
     imageUrl,
+    nickname,
   });
   res.json({ post: createdPost });
 });
 //게시글 수정
-router.put("post/postdetail/edit/:postId", authMiddleware, async (req, res) => {
-  const { postId } = req.params;
-  const [existPost] = await Post.findOne({ PostId: Number(postId) });
-  const user = res.locals.user;
-  const { content, title, name } = req.body;
+router.put('/post/postdetail/edit/:postId',authMiddleware, async(req,res)=>{
+    const postId = Number(req.params.postId)
+    const [existPost] = await Post.find({ postId })
+    const {user} = res.locals
+    const {title, content, imageUrl } = req.body
+    console.log("user.nickname 정보입니다.",user.nickname,)
+    console.log("existPost.nick 정보입니다.",existPost.nickname)
+    console.log(existPost)
+    if(user.nickname !== existPost.nickname){
+        return res.status(400).json({ result : false, message : "본인의 게시글만 수정 가능합니다."})
+    }
+    if(!content||!title||!imageUrl){
+      return res.status(400).json({ result: false, message : "빈값을 채워주세요" })
+    }
+    
+    await Post.updateOne({postId}, {$set: {title, content, imageUrl} } )
+    return res.status(200).json({ result: true })
+    //여기도 merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 기여운창민아,
 
-  if (user.nickname !== existPost.nickname) {
-    return res
-      .status(400)
-      .json({ result: false, message: "본인의 게시글만 수정 가능합니다." });
-  }
-  if (user.nickname === existPost.nickname) {
-    await Post.updateOne({ listId }, { $set: { content, title, name } });
-    return res.status(200).json({ result: true });
-  }
-  if (!content || !title || !name) {
-    return res.status(400).json({ result: true });
-  }
-  //여기도 merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 기여운창민아,
-});
+})
 
 // 게시물 삭제
 router.delete(

@@ -9,9 +9,8 @@ const postSchema = new Schema({
      content: { type: String, required: true }, 
      imageUrl: { type: String, required: true }, 
      word: {type: String},
-     createAt: { type: Date, default: Date.now() } 
-
-
+     createAt: { type: Date, default: Date.now() },
+     nickname : { type : String, required: true },
 });
 
 
