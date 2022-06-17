@@ -20,21 +20,6 @@ router.get("/post", authMiddleware, async (req, res, next) => {
   }
 });
 // 게시물 상세 조회 메인 상세
-<<<<<<< HEAD
-router.get(
-  "/post/postdetail/:postId",
-  authMiddleware,
-  async (req, res, next) => {
-    try {
-      const { postId } = req.params;
-      const postDetail = await Post.findOne({
-        postId,
-      });
-      res.status(200).json({ postDetail });
-    } catch (error) {
-      res.status(400).json({ success: false, errorMessage: "실패했습니다." });
-    }
-=======
 router.get("/post/postdetail/:postId", authMiddleware, async (req, res, next) => {
   try {
     const { postId } = req.params;
@@ -44,9 +29,8 @@ router.get("/post/postdetail/:postId", authMiddleware, async (req, res, next) =>
     
   } catch (error) {
     res.status(400).json({ success: false, errorMessage: "실패했습니다." });
->>>>>>> origin/Newchangmin
   }
-);
+});
 
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
