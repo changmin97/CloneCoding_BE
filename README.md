@@ -14,6 +14,7 @@ pinterest를 클론코딩하였습니다.
 Server: AWS EC2  
 Framework: node.js  
 Database: MongoDB, firebase, s3 
+backend: Node.JS 
 frontend:Javascript,React,redux,axios  
 Tool : Git, Notion  
 
@@ -31,3 +32,9 @@ Tool : Git, Notion
 > 3.  보드
 노션링크
 https://nutritious-opera-139.notion.site/SA-3-0209b4ce6cd8498f9c57dcb709b7937c
+
+## troubleshooting⛔️
+-
+-
+-
+-
