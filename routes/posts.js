@@ -16,7 +16,7 @@ router.get("/post", authMiddleware, async (req, res, next) => {
     const posts = await Post.find({}).sort({ createAt: -1 });
     res.send(posts);
   } catch (error) {
-    res.status(500).json({ success: false, errorMessage: "실패했습니다." }); //message로 통일해주세용~ㅛ~
+    res.status(500).json({ result: false, errorMessage: "실패했습니다." }); //message로 통일해주세용~ㅛ~
   }
 });
 
@@ -31,7 +31,7 @@ router.get(
       const existcomments = await Comment.find({ postId });
       return res.status(200).json({ postDetail, existcomments });
     } catch (error) {
-      res.status(400).json({ success: false, errorMessage: "실패했습니다." });
+      res.status(400).json({ result: false, errorMessage: "실패했습니다." });
     }
   }
 );
@@ -64,7 +64,7 @@ router.put(
     const [existPost] = await Post.find({ postId });
     const { user } = res.locals;
     const { title, content, imageUrl } = req.body;
-    
+
     if (user.nickname !== existPost.nickname) {
       return res
         .status(400)
@@ -102,9 +102,7 @@ router.delete(
         Message: `${deletePost} "삭제되었습니다"`,
       });
     } catch (error) {
-      return res
-        .status(400)
-        .json({ success: false, errorMessage: "실패했습니다." });
+      return res.status(400).json({ result: false, Message: "실패했습니다." });
     }
   }
 );
@@ -114,19 +112,18 @@ router.get("/post/search/:word", authMiddleware, async (req, res, next) => {
   const { word } = req.params;
   const { title } = req.body;
   let postArr = [];
-  let posts = await Post.find({ title });
-  for (let i in posts) {
-    postArr.push(posts[i]);
-  };
+  
   try {
-    if (postArr.includes(word)) {
-      return res.status(200).send({
-        postArr
-      });
+    let posts = await Post.find({ title });
+    for (let i in posts) {
+      if (posts[i].title.includes(word)) {
+        postArr.push(posts[i]);
+      }
     }
+      return res.status(200).send(postArr);
   } catch (error) {
     console.log(error);
-    return res.status(400).json({ success: false, Message: "실패했습니다." });
+    return res.status(400).json({ result: false, Message: "실패했습니다." });
   }
 });
 

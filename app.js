@@ -24,6 +24,7 @@ app.use(
   [postsRouter],
   [commentsRouter]
 );
+
 app.use(
   "/user",
   express.urlencoded({ extended: false }),
