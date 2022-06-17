@@ -6,6 +6,7 @@ pinterest를 클론코딩하였습니다.
 **BACK-END(3명)**
 *BackEnd : 정오현,정연욱,이창민  
 *Back-end Git : https://github.com/changmin97/CloneCoding_BE 
+
 **FRONT-END(2명)**
 *FrontEnd : 이담,이형섭  
 *Front-end Git : https://github.com/vennydev/hanghae-clone
