@@ -6,7 +6,6 @@ const cors = require('cors');
 const connect = require("./schemas/index.js");
 const morgan = require('morgan')
 const helmet = require('helmet')
-
 connect();
 //라우터
 const postsRouter = require("./routes/posts");

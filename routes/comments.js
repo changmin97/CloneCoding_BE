@@ -2,13 +2,11 @@ const express = require("express");
 const Comment = require("../schemas/comment");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authmiddleware.js");
-const moment = require('momnet')
 
 
 //댓글 작성
 router.post("/post/postdetail/:postId/comment", authMiddleware, async (req, res) => {
     try {
-      const createAt = moment().add('9','h').format('YYYY-MM-DD HH:mm:ss')
       const { postId } = req.params;
       const { comment } = req.body;
       const { nickname } = res.locals.user;
@@ -25,9 +23,7 @@ router.post("/post/postdetail/:postId/comment", authMiddleware, async (req, res)
 
     } catch (err) {
       console.log(err);
-      res.status(400).send({
-        message: "요청한 데이터 형식이 올바르지 않습니다.",
-      });
+      res.status(400).send({message: "요청한 데이터 형식이 올바르지 않습니다.",});
     }
   });
 
@@ -58,20 +54,20 @@ router.post("/post/postdetail/:postId/comment", authMiddleware, async (req, res)
   });
 
   // //댓글 수정
-// router.put("post/postdetail/:postId/:commentId", authMiddleware, async (req, res) => {
-//   const { postId } = req.params;
-//   const { commentId } = req.params;
-//   const { comment } = req.body;
-//   const username = res.locals.user.username;
-//   const existscomment = await Comment.find({$and: [{ postId }, { commentId }],});
-// // merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 창민아
+router.put("post/postdetail/:postId/:commentId", authMiddleware, async (req, res) => {
+  const { postId } = req.params;
+  const { commentId } = req.params;
+  const { comment } = req.body;
+  const username = res.locals.user.username;
+  const existscomment = await Comment.find({$and: [{ postId }, { commentId }],});
+// merge후 콘솔 찍어보면서 findone으로 고치기, 아래 코드도 틀릴경우만 if문으로 묶고 성공은 풀기로 수정하자 창민아
 
-//   if (existscomment[0].username !== username) {
-//     return res.json({ errorMessage: "타인의 댓글은 수정 불가능합니다." });
-//   }
+  if (existscomment[0].username !== username) {
+    return res.json({ errorMessage: "타인의 댓글은 수정 불가능합니다." });
+  }
 
-//   await Comment.updateOne({ $and: [{ postId }, { commentId }] },{ $set: { comment } });
-//   return res.status(200).json({ result : true });
-// });
+  await Comment.updateOne({ $and: [{ postId }, { commentId }] },{ $set: { comment } });
+  return res.status(200).json({ result : true });
+});
   
 module.exports = router;

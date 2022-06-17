@@ -18,7 +18,7 @@ const { Schema } = mongoose;
     },
     createAt:{
       type: Date,
-      required: true,
+      default: Date.now
     }
 });
 

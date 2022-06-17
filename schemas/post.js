@@ -5,22 +5,22 @@ const { Schema } = mongoose;
     postId: {
         type: Number,
         required: true,
-        unique: true
     },
-    product: {
+    title: {
         type: String,
         required: true
-    },
-    nickname : {
-        type: String
     },
     content : {
         type: String,
         required: true
     },
-    image : {
-      type: String,
-      required: true
+    imageUrl : {
+        type: String,
+        required: true
+    },
+    createAt : {
+      type: Date,
+      default: Date.now
     }
 });
 
