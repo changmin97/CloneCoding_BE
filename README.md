@@ -15,7 +15,6 @@ pinterest를 클론코딩하였습니다.
 Server: AWS EC2  
 Framework: node.js  
 Database: MongoDB, firebase, s3 
-
 backend: Node.JS 
 frontend:Javascript,React,redux,axios  
 Tool : Git, Notion  
