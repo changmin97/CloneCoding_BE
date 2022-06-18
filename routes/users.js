@@ -12,7 +12,7 @@ const signUpSchema = Joi.object({
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] }}).required(),
     nickname: Joi.string().pattern(new RegExp('^[0-9A-Za-z가-힣]{2,10}$')).required(),
     password: Joi.string().pattern(new RegExp('^[0-9A-Za-z]{4,16}$')).required(),
-    passwordCheck: Joi.ref('password'),
+    passwordCheck: Joi.string(),
 });
 
 // 회원가입
@@ -69,40 +69,40 @@ router.post("/login", async (req, res) => {
     아이디, 닉네임 중복체크 구현
     회원가입 시 비밀번호 암호화 */
 
-// 아이디(이메일) 중복체크
-router.get("/idCheck/:username", async (req, res) => {
-    const email = req.params.username;
+// 이메일 중복체크
+router.get("/emailCheck", async (req, res) => {
+    const email = req.body.email;
     const existUser = await User.findOne({ email });
     
     if (existUser) {
         res.status(400).send({
-            errorMessage: "사용중인 이메일입니다.",
+            message: "사용중인 이메일입니다.",
             result: false,
         });
         return;
     }
 
     res.send({
-        errorMessage: "사용 가능한 이메일입니다.",
+        message: "사용 가능한 이메일입니다.",
         result: true,
     });
 });
 
 // 닉네임 중복체크
-router.get("/nicknameCheck/:nickname", async (req, res) => {
-    const nickname = req.params.nickname;
+router.get("/nicknameCheck/", async (req, res) => {
+    const nickname = req.body.nickname;
     const existnickname = await User.findOne({ nickname });
     
     if (existnickname) {
         res.status(400).send({
-            errorMessage: "사용중인 닉네임입니다.",
+            message: "사용중인 닉네임입니다.",
             result: false,
         });
         return;
     }
 
     res.send({
-        errorMessage: "사용 가능한 닉네임입니다.",
+        message: "사용 가능한 닉네임입니다.",
         result: true,
     });
 });
