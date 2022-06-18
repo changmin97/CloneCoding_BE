@@ -15,7 +15,7 @@ router.get("/post", authMiddleware, async (req, res, next) => {
     const posts = await Post.find({}).sort({ createAt: -1 });
     res.send(posts);
   } catch (error) {
-    res.status(500).json({ success: false, message: "실패했습니다." }); //message로 통일해주세용~ㅛ~
+    res.status(500).json({ success: false, message: "실패했습니다." }); 
   }
 });
 // 게시물 상세 조회 메인 상세
