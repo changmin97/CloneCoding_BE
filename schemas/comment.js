@@ -18,8 +18,8 @@ const { Schema } = mongoose;
     },
     createAt:{
       type: Date,
-      default: Date.now
-    }
+      default: Date.now()
+    },
 });
 
 //적절하게 수정하신후 이문구 지워주세요

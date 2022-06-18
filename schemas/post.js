@@ -8,9 +8,8 @@ const postSchema = new Schema({
      title: { type: String, required: true }, 
      content : { type: String, required: true }, 
      imageUrl : { type: String, required: true }, 
-     createAt : { type: Date, default: Date.now() } 
-
-
+     createAt : { type: Date, default: Date.now() },
+     nickname : { type : String, required: true },
 });
 
 
