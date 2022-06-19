@@ -109,7 +109,7 @@ router.put(
 
 // 게시물 삭제
 router.delete(
-  "/post/postdetail/delete/:postId",
+  "/post/postdetail/remove/:postId",
   authMiddleware,
   async (req, res, next) => {
     try {

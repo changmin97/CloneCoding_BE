@@ -18,5 +18,5 @@ const UserSchema = new Schema({
     },
 });
 
-//적절하게 수정하신후 이문구 지워주세요
+
 module.exports = mongoose.model("User", UserSchema);
