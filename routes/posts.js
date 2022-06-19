@@ -113,16 +113,19 @@ router.delete(
   authMiddleware,
   async (req, res, next) => {
     try {
+      const { nickname } = req.body;
       const { postId } = req.params;
       const { user } = res.locals;
       const deletePost = await Post.findOneAndDelete(Number(postId));
-      if (deletePost.nickname !== user.nickname) {
+      
+      if (user.nickname) {
         return res.json({
           success: true,
           Message: `${deletePost} "삭제되었습니다"`,
         });
       }
     } catch (error) {
+      console.error(error);
       return res.status(400).json({ result: false, Message: "실패했습니다." });
     }
   }
