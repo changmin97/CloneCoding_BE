@@ -18,6 +18,24 @@ router.post("/signup", async (req, res) => {
     try {
         const { email, nickname, password, passwordCheck } = 
         await signUpSchema.validateAsync(req.body);
+
+        const existUser = await User.findOne({ email });
+    if (existUser) {
+        res.status(400).send({
+            message: "사용중인 이메일입니다.",
+            result: false,
+        });
+        return;
+    }
+    const existnickname = await User.findOne({ nickname });
+    if (existnickname) {
+        res.status(400).send({
+            message: "사용중인 닉네임입니다.",
+            result: false,
+        });
+        return;
+    }
+
         // 비밀번호와 비밀번호 확인란이 일치하지 않을 경우
         if (password !== passwordCheck) {
             res.status(400).send({
@@ -63,39 +81,5 @@ router.post("/login", async (req, res) => {
         result: true,
     });
 });
-/* 남은 일
-    아이디, 닉네임 중복체크 구현
-    회원가입 시 비밀번호 암호화 */
-// 이메일 중복체크
-router.get("/emailCheck", async (req, res) => {
-    const email = req.body.email;
-    const existUser = await User.findOne({ email });
-    if (existUser) {
-        res.status(400).send({
-            message: "사용중인 이메일입니다.",
-            result: false,
-        });
-        return;
-    }
-    res.send({
-        message: "사용 가능한 이메일입니다.",
-        result: true,
-    });
-});
-// 닉네임 중복체크
-router.get("/nicknameCheck/", async (req, res) => {
-    const nickname = req.body.nickname;
-    const existnickname = await User.findOne({ nickname });
-    if (existnickname) {
-        res.status(400).send({
-            message: "사용중인 닉네임입니다.",
-            result: false,
-        });
-        return;
-    }
-    res.send({
-        message: "사용 가능한 닉네임입니다.",
-        result: true,
-    });
-});
+
 module.exports = router;
