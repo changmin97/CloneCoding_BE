@@ -53,7 +53,8 @@ router.get(
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
   try {
-    const { nickname } = res.locals.user;
+    const  {nickname}  = res.locals.user;
+    console.log(res.locals.user);
     const { title, content, imageUrl } = req.body;
     const maxPostId = await Post.findOne().sort("-postId");
     let postId = 1;

@@ -1,9 +1,30 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/user");
-const Post = require("../schemas/post");
 
 module.exports = (req, res, next) => {
+  // try {
+  //   const { authorization } = req.headers;
+  //   const [authType, authToken] = authorization.split(" ");
+
+  //   if (!authToken || authType !== "Bearer") {
+  //     res.status(401).send({
+  //       errorMessage: "로그인이 필요한 기능입니다.",
+  //     });
+  //     return;
+  //   }
+  //   const { nickname } = jwt.verify(authToken, process.env.SECRET_KEY);
+  //   User.findOne( {nickname} ).then((user) => {
+  //     res.locals.user = user;
+  //     next();
+  //   });
+  // } catch (err) {
+  //   res.status(401).send({
+  //     errorMessage: "로그인이 필요합니다.",
+  //   });
+  //   return;
+  // }
+
   try {
     const { authorization } = req.headers;
     const [authType, authToken] = authorization.split(" ");
@@ -14,23 +35,10 @@ module.exports = (req, res, next) => {
       });
       return;
     }
-    const { nickname } = jwt.verify(authToken, process.env.SECRET_KEY);
-    User.findOne({ nickname }).then((user) => {
-      res.locals.user = user;
-      next();
-    });
-  } catch (err) {
-    res.status(401).send({
-      errorMessage: "로그인이 필요합니다.",
-    });
-    return;
-  }
-
-  try {
-    const myToken = verifyToken(tokenValue);
+    const myToken = verifyToken(authToken);
     if (myToken == "jwt expired") {
       // access token 만료
-      const userInfo = jwt.decode(tokenValue, process.env.SECRET_KEY);
+      const userInfo = jwt.decode(authToken, process.env.SECRET_KEY);
       console.log(userInfo);
       const nickname = userInfo.nickname;
       let refresh_token;
@@ -47,7 +55,7 @@ module.exports = (req, res, next) => {
         }
       });
     } else {
-      const { nickname } = jwt.verify(tokenValue, process.env.SECRET_KEY);
+      const { nickname } = jwt.verify(authToken, process.env.SECRET_KEY);
       User.findOne({ nickname }).then((u) => {
         res.locals.user = u;
         next();
@@ -64,11 +72,5 @@ function verifyToken(token) {
   } catch (error) {
     return error.message;
   }
-}
-
-module.exports = (req, res, next) => {
-  Post.find({}).then((post) => {
-    res.locals.post = post;
-    next();
-  });
 };
+

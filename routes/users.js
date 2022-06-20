@@ -5,6 +5,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
+const SALT_NUM = process.env.SALT_NUM
 
 // 회원가입 조건
 const signUpSchema = Joi.object({
@@ -48,7 +49,7 @@ router.post("/signup", async (req, res) => {
       return;
     }
     const hashedPassword = await bcrypt.hash(password, 10); // 비밀번호 암호화
-    console.log(hashedPassword);
+    
     const user = new User({ email, nickname, password: hashedPassword });
     await user.save();
     res.status(201).send({
@@ -78,7 +79,7 @@ router.post("/login", async (req, res) => {
   }
 
   const accessToken = jwt.sign({ nickname: user.nickname }, process.env.SECRET_KEY, {
-    expiresIn: "3h",
+    expiresIn: "10m",
   });
   const refreshToken = jwt.sign({}, process.env.SECRET_KEY, {
     expiresIn: "10d",
