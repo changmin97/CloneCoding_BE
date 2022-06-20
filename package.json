@@ -1,0 +1,38 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwt-simple": "^0.5.6",
+    "moment": "^2.29.3",
+    "mongoose": "^6.3.8",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.16",
+    "redis": "^4.1.0"
+  },
+  "name": "clonecoding_be",
+  "version": "1.0.0",
+  "description": "clone coding",
+  "main": "app.js",
+  "scripts": {
+    "test": "clone coding",
+    "start": "nodemon app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/changmin97/CloneCoding_BE.git"
+  },
+  "keywords": [
+    "clone"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/changmin97/CloneCoding_BE/issues"
+  },
+  "homepage": "https://github.com/changmin97/CloneCoding_BE#readme"
+}
