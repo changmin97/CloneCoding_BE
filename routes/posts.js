@@ -2,7 +2,7 @@ const express = require("express");
 const Comment = require("../schemas/comment");
 const Post = require("../schemas/post");
 const router = express.Router();
-const authMiddleware = require("../middlewares/authmiddleware.js");
+const authMiddleware = require("../middlewares/authmiddleware");
 
 // 메인페이지
 router.get("/main", (req, res) => {
@@ -25,6 +25,7 @@ router.get(
   authMiddleware,
   async (req, res, next) => {
     try {
+      res.locals.user = user;
       const { postId } = req.params;
       const postDetail = await Post.findOne({ postId });
       const existcomments = await Comment.find({ postId });
@@ -41,6 +42,7 @@ router.get(
   authMiddleware,
   async (req, res, next) => {
     try {
+      res.locals.user = user
       const { postId } = req.params;
       const postDetail = await Post.findOne({ postId });
       const existcomments = await Comment.find({ postId });
@@ -54,6 +56,7 @@ router.get(
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
   try {
+    
     const  {nickname}  = res.locals.user;
     console.log(res.locals.user);
     const { title, content, imageUrl } = req.body;

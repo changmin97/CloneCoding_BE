@@ -26,32 +26,33 @@ module.exports = (req, res, next) => {
     const myToken = verifyToken(authToken);
     if (myToken == "jwt expired") {
       // access token 만료
-      console.log('만료되었습니다.')
+      console.log("만료되었습니다.");
       const userInfo = jwt.decode(authToken, SECRET_KEY);
-      console.log('userInfo',userInfo);
+      console.log("userInfo", userInfo);
       const nickname = userInfo.nickname;
 
       let refreshtoken;
 
-      User.findOne({ where: nickname }).then((user) => {
-        if (user === null && user === undefined) {
-          throw Error(" ERROR ");
-        }
+      User.findOne({ nickname }).then((user) => {
         refreshtoken = user.refreshtoken;
-        console.log(myRefreshToken);
-        const myRefreshToken = verifyrefeshToken(refreshtoken);
+        console.log(refreshtoken);
 
+        const myRefreshToken = verifyrefeshToken(refreshtoken);
+        console.log("myRefreshToken", myRefreshToken);
         if (myRefreshToken == "jwt expired") {
           res.send({ errorMessage: "로그인이 필요합니다." });
         } else {
           const myNewToken = jwt.sign(
             { nickname: user.nickname },
             REFRESH_SECRET_KEY,
-            {expiresIn: "1h",}
-
+            { expiresIn: "1h" }
           );
-
-          res.send({ message: "new token", myNewToken });
+          let newToken = {
+            nickname,
+            myNewToken
+          }
+          res.locals.user = newToken;
+          next();
         }
       });
     } else {

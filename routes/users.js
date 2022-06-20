@@ -5,8 +5,9 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const Bcrypt = require("bcrypt");
-const SALT_NUM = process.env.SALT_NUM;
-let refreshTokens = {}
+const SALT_NUM = process.env.SALT_NUM
+const SECRET_KEY = process.env.SECRET_KEY;
+const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY;
 
 // 회원가입 조건
 const signUpSchema = Joi.object({
@@ -50,15 +51,10 @@ router.post("/signup", async (req, res) => {
       return;
     }
 
-    const salt = await Bcrypt.genSalt(Number(SALT_NUM));
+    const salt = await Bcrypt.genSalt(Number(SALT_NUM))
     const hashPassword = await Bcrypt.hash(password, salt); // 비밀번호 암호화
-
-    const user = new User({
-      email,
-      nickname,
-      password: hashPassword,
-      refreshToken: null,
-    });
+    
+    const user = new User({ email, nickname, password: hashPassword, refreshToken: null });
     await user.save();
     res.status(201).send({
       message: "회원가입에 성공하였습니다.",
@@ -86,28 +82,20 @@ router.post("/login", async (req, res) => {
     return;
   }
 
-  const accessToken = jwt.sign(
-    { nickname: user.nickname },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "10m",
-    }
-  );
-  const refreshToken = jwt.sign({}, process.env.SECRET_KEY, {
+  const accessToken = jwt.sign({ nickname: user.nickname }, SECRET_KEY, {
+    expiresIn: "10s",
+  });
+  const refreshToken = jwt.sign({}, REFRESH_SECRET_KEY, {
     expiresIn: "10d",
   });
-  await user.update({ refreshToken }, { where: { nickname: user.nickname } });
-  const response = {
-    "status": "Logged in",
-    "token": accessToken,
-    "refreshToken": refreshToken,
-  };
+  await user.update(
+    { refreshToken },
+    { where: { nickname: user.nickname } }
+  )
+
   
-  refreshTokens[refreshToken] = response
-
-
   res.send({
-    response
+    accessToken,
   });
 });
 
