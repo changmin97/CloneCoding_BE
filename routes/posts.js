@@ -68,6 +68,7 @@ router.post("/post/upload", authMiddleware, async (req, res) => {
       imageUrl,
       nickname,
     });
+    
     return res.json({ post: createdPost });
   } catch (err) {
     console.error(err);

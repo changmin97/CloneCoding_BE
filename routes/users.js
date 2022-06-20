@@ -4,7 +4,7 @@ const User = require("../schemas/user");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
-const bcrypt = require("bcrypt");
+const Bcrypt = require("bcrypt");
 const SALT_NUM = process.env.SALT_NUM
 
 // 회원가입 조건
@@ -48,9 +48,11 @@ router.post("/signup", async (req, res) => {
       });
       return;
     }
-    const hashedPassword = await bcrypt.hash(password, 10); // 비밀번호 암호화
+
+    const salt = await Bcrypt.genSalt(Number(SALT_NUM))
+    const hashPassword = await Bcrypt.hash(password, salt); // 비밀번호 암호화
     
-    const user = new User({ email, nickname, password: hashedPassword });
+    const user = new User({ email, nickname, password: hashPassword, refreshToken: null });
     await user.save();
     res.status(201).send({
       message: "회원가입에 성공하였습니다.",
