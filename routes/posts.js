@@ -140,11 +140,11 @@ router.get("/post/search/:word", authMiddleware, async (req, res, next) => {
   const { title } = req.body;
   let postArr = [];
   try {
-    // if(word == null){
-    //   const posts = await Post.find({}).sort({ createAt: -1 });
-    //   res.send(posts);
-    // }
-    
+
+    if(!word){
+      const posts = await Post.find({}).sort({ createAt: -1 });
+      res.send(posts);
+    }
     let posts = await Post.find({ title });
     for (let i in posts) {
       if (posts[i].title.includes(word)) {

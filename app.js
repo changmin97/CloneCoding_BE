@@ -15,7 +15,7 @@ const commentsRouter = require("./routes/comments");
 //미들웨어
 app.use(express.json());
 app.use(cors());
-app.use(helmet())
+app.use(helmet.xssFilter())
 app.use(morgan('tiny'))
 
 app.use(
