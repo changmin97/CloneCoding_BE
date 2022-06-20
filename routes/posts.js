@@ -3,6 +3,7 @@ const Comment = require("../schemas/comment");
 const Post = require("../schemas/post");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authmiddleware.js");
+const moment = require('moment')
 
 // 메인페이지
 router.get("/main", (req, res) => {
@@ -52,8 +53,11 @@ router.get(
 
 // 게시물 작성
 router.post("/post/upload", authMiddleware, async (req, res) => {
-  try {
+
+try {
+  var createAt = moment().add('9','h').format('YYYY-MM-DD HH:mm:ss')
     const { nickname } = res.locals.user;
+    console.log(nickname)
     const { title, content, imageUrl } = req.body;
     const maxPostId = await Post.findOne().sort("-postId");
     let postId = 1;
@@ -66,10 +70,11 @@ router.post("/post/upload", authMiddleware, async (req, res) => {
       content,
       imageUrl,
       nickname,
+      createAt,
     });
     return res.json({ post: createdPost });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return res.status(400).json({ success: false, message: "실패했습니다." });
   }
 });
@@ -149,5 +154,16 @@ router.get("/post/search/:word", authMiddleware, async (req, res, next) => {
     return res.status(400).json({ result: false, Message: "실패했습니다." });
   }
 });
+
+router.get("/mypage", authMiddleware, async (req, res, next) => {
+  const { nickname } = res.locals.user;
+  const posts = await Post.find({nickname});
+
+  res.json({
+    nickname,
+    posts
+  })
+});
+
 
 module.exports = router;

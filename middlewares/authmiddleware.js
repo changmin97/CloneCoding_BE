@@ -13,8 +13,8 @@ module.exports = (req, res, next) => {
       });
       return;
     }
-    const { userId } = jwt.verify(authToken, process.env.SECRET_KEY);
-    User.findOne({ userId }).then((user) => {
+    const { nickname } = jwt.verify(authToken, process.env.SECRET_KEY);
+    User.findOne({ nickname }).then((user) => {
       res.locals.user = user;
       next();
     });

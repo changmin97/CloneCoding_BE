@@ -77,8 +77,9 @@ router.post("/login", async (req, res) => {
     }
 
     res.send({
-        token: jwt.sign({ userId: user.userId }, process.env.SECRET_KEY),
+        token: jwt.sign({ nickname: user.nickname}, process.env.SECRET_KEY, { expiresIn: "3d" }),
         result: true,
+        
     });
 });
 
