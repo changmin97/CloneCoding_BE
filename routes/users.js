@@ -5,7 +5,8 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const Bcrypt = require("bcrypt");
-const SALT_NUM = process.env.SALT_NUM
+const SALT_NUM = process.env.SALT_NUM;
+let refreshTokens = {}
 
 // 회원가입 조건
 const signUpSchema = Joi.object({
@@ -49,10 +50,15 @@ router.post("/signup", async (req, res) => {
       return;
     }
 
-    const salt = await Bcrypt.genSalt(Number(SALT_NUM))
+    const salt = await Bcrypt.genSalt(Number(SALT_NUM));
     const hashPassword = await Bcrypt.hash(password, salt); // 비밀번호 암호화
-    
-    const user = new User({ email, nickname, password: hashPassword, refreshToken: null });
+
+    const user = new User({
+      email,
+      nickname,
+      password: hashPassword,
+      refreshToken: null,
+    });
     await user.save();
     res.status(201).send({
       message: "회원가입에 성공하였습니다.",
@@ -70,7 +76,7 @@ router.post("/login", async (req, res) => {
 
   let bcpassword = "";
   if (user) {
-    bcpassword = await bcrypt.compare(password, user.password);
+    bcpassword = await Bcrypt.compare(password, user.password);
   }
   if (!bcpassword) {
     res.status(400).send({
@@ -80,19 +86,31 @@ router.post("/login", async (req, res) => {
     return;
   }
 
-  const accessToken = jwt.sign({ nickname: user.nickname }, process.env.SECRET_KEY, {
-    expiresIn: "10m",
-  });
+  const accessToken = jwt.sign(
+    { nickname: user.nickname },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: "10m",
+    }
+  );
   const refreshToken = jwt.sign({}, process.env.SECRET_KEY, {
     expiresIn: "10d",
   });
-  await user.update(
-    { refreshToken },
-    { where: { nickname: user.nickname } }
-  )
+  await user.update({ refreshToken }, { where: { nickname: user.nickname } });
+  const response = {
+    "status": "Logged in",
+    "token": accessToken,
+    "refreshToken": refreshToken,
+  };
+  
+  refreshTokens[refreshToken] = response
+
+
   res.send({
-    accessToken
+    response
   });
 });
+
+// 로그아웃
 
 module.exports = router;

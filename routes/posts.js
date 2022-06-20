@@ -6,6 +6,7 @@ const authMiddleware = require("../middlewares/authmiddleware.js");
 
 // 메인페이지
 router.get("/main", (req, res) => {
+  
   res.json({ result: true });
 });
 
@@ -114,7 +115,7 @@ router.delete(
     try {
       const postId = Number(req.params.postId);
       const { user } = res.locals;
-      const [existNickname] = await Post.find({ postId });
+    
       await Post.findOneAndDelete(Number(postId));
 
       if (user.nickname) {
@@ -136,10 +137,10 @@ router.get("/post/search/:word", authMiddleware, async (req, res, next) => {
   const { title } = req.body;
   let postArr = [];
   try {
-    if(word == null){
-      const posts = await Post.find({}).sort({ createAt: -1 });
-      res.send(posts);
-    }
+    // if(word == null){
+    //   const posts = await Post.find({}).sort({ createAt: -1 });
+    //   res.send(posts);
+    // }
     
     let posts = await Post.find({ title });
     for (let i in posts) {

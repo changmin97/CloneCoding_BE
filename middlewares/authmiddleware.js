@@ -1,45 +1,63 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const User = require("../schemas/user");
+const SECRET_KEY = process.env.SECRET_KEY;
+const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY;
 
 module.exports = (req, res, next) => {
-  try {
-    const { authorization } = req.headers;
-    const [authType, authToken] = authorization.split(" ");
+  const { authorization } = req.headers;
 
-    if (!authToken || authType !== "Bearer") {
-      res.status(401).send({
-        errorMessage: "로그인이 필요한 기능입니다.",
-      });
-      return;
-    }
+  if (authorization == null) {
+    res.status(401).send({
+      errorMessage: "로그인이 필요합니다.",
+    });
+    return;
+  }
+  const [authType, authToken] = authorization.split(" ");
+
+  if (!authToken || authType !== "Bearer") {
+    res.status(401).send({
+      errorMessage: "로그인이 필요한 기능입니다.",
+    });
+    return;
+  }
+
+  try {
     const myToken = verifyToken(authToken);
     if (myToken == "jwt expired") {
       // access token 만료
-      const userInfo = jwt.decode(authToken, process.env.SECRET_KEY);
-      console.log(userInfo);
+      console.log('만료되었습니다.')
+      const userInfo = jwt.decode(authToken, SECRET_KEY);
+      console.log('userInfo',userInfo);
       const nickname = userInfo.nickname;
-      let refresh_token;
-      User.findOne({ where: nickname }).then((u) => {
-        refresh_token = u.refresh_token;
-        const myRefreshToken = verifyToken(refresh_token);
+
+      let refreshtoken;
+
+      User.findOne({ where: nickname }).then((user) => {
+        if (user === null && user === undefined) {
+          throw Error(" ERROR ");
+        }
+        refreshtoken = user.refreshtoken;
+        console.log(myRefreshToken);
+        const myRefreshToken = verifyrefeshToken(refreshtoken);
+
         if (myRefreshToken == "jwt expired") {
           res.send({ errorMessage: "로그인이 필요합니다." });
         } else {
           const myNewToken = jwt.sign(
-            { nickname: u.nickname },
-            process.env.SECRET_KEY,
-            {
-              expiresIn: "1200s",
-            }
+            { nickname: user.nickname },
+            REFRESH_SECRET_KEY,
+            {expiresIn: "1h",}
+
           );
+
           res.send({ message: "new token", myNewToken });
         }
       });
     } else {
-      const { nickname } = jwt.verify(authToken, process.env.SECRET_KEY);
-      User.findOne({ nickname }).then((u) => {
-        res.locals.user = u;
+      const { nickname } = jwt.verify(authToken, SECRET_KEY);
+      User.findOne({ nickname }).then((user) => {
+        res.locals.user = user;
         next();
       });
     }
@@ -47,10 +65,17 @@ module.exports = (req, res, next) => {
     res.send({ errorMessage: err + " : 로그인이 필요합니다." });
   }
 };
-
+//  유저정보에 토큰도 같이
 function verifyToken(token) {
   try {
-    return jwt.verify(token, process.env.SECRET_KEY);
+    return jwt.verify(token, SECRET_KEY);
+  } catch (error) {
+    return error.message;
+  }
+}
+function verifyrefeshToken(refreshtoken) {
+  try {
+    return jwt.verify(refreshtoken, REFRESH_SECRET_KEY);
   } catch (error) {
     return error.message;
   }
