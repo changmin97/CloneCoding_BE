@@ -51,7 +51,7 @@ async function postUpload(req, res, next) {
     return res.json({ post: createdPost });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ success: false, message: "게시물 업로드 Error" });
+    return res.status(400).json({ success: false, message: "게시물을 업로드 에러" });
   }
 }
 
@@ -76,7 +76,7 @@ async function postEdit(req, res, next) {
     return res.status(200).json({ result: true });
   } catch (err) {
     console.log(err);
-    return res.status(400).json({ success: false, message: "실패했습니다." });
+    return res.status(400).json({ success: false, message: "게시글 수정 에러" });
   }
 }
 
@@ -95,7 +95,7 @@ async function postRomove(req, res, next) {
     }
   } catch (error) {
     console.error(error);
-    return res.status(400).json({ result: false, Message: "실패했습니다." });
+    return res.status(400).json({ result: false, Message: "게시글 삭제 에러" });
   }
 }
 
@@ -116,7 +116,7 @@ async function postSearch(req, res, next) {
     }
     return res.status(200).send(postArr);
   } catch (error) {
-    return res.status(400).json({ result: false, Message: "실패했습니다." });
+    return res.status(400).json({ result: false, Message: "검색 에러" });
   }
 }
 
