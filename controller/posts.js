@@ -1,4 +1,3 @@
-const express = require("express");
 const Comment = require("../schemas/comment");
 const Post = require("../schemas/post");
 
