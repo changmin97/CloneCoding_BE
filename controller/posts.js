@@ -16,7 +16,6 @@ async function mainPost(req, res, next) {
 
 async function postDetail(req, res, next) {
   try {
-    res.locals.user = user;
     const { postId } = req.params;
     const postDetail = await Post.findOne({ postId });
     const existcomments = await Comment.find({ postId });

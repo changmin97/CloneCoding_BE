@@ -34,7 +34,7 @@ module.exports = (req, res, next) => {
       let refreshtoken;
 
       User.findOne({ nickname }).then((user) => {
-        refreshtoken = user.refreshtoken;
+        
         console.log(refreshtoken);
 
         const myRefreshToken = verifyrefeshToken(refreshtoken);
