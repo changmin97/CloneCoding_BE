@@ -104,7 +104,7 @@ async function postSearch(req, res, next) {
   const { title } = req.body;
   let postArr = [];
   try {
-    if (!word) {
+    if (word == "") {
       const posts = await Post.find({}).sort({ createAt: -1 });
       res.send(posts);
     }
