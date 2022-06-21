@@ -1,4 +1,3 @@
-const express = require("express");
 const Comment = require("../schemas/comment");
 
 async function commentPost(req, res, next) {

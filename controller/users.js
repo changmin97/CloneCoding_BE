@@ -84,12 +84,12 @@ async function login (req, res, next) {
     return;
   }
   const accessToken = jwt.sign({ nickname: user.nickname }, SECRET_KEY, {
-    expiresIn: "10s",
+    expiresIn: "15m",
   });
   const refreshToken = jwt.sign({}, REFRESH_SECRET_KEY, {
     expiresIn: "10d",
   });
-  await user.update({ refreshToken }, { where: { nickname: user.nickname } });
+  await user.update( refreshToken , { nickname: user.nickname } );
   res.send({
     accessToken,
   });
