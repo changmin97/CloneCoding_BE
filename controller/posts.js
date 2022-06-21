@@ -10,18 +10,23 @@ async function mainPost(req, res, next) {
     const posts = await Post.find({}).sort("-postId");
     res.send(posts);
   } catch (error) {
-    res.status(500).json({ success: false, message: "실패했습니다." });
+    res.status(500).json(
+      { 
+        success: false, message: "메인 게시물을 불러올 수 없습니다.",
+        message: error.message
+       });
   }
 }
 
 async function postDetail(req, res, next) {
   try {
-    const { postId } = req.params;
+    const postId = Number(req.params.postId);
     const postDetail = await Post.findOne({ postId });
     const existcomments = await Comment.find({ postId });
+    console.log(postDetail);
     return res.status(200).json({ postDetail, existcomments });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "실패했습니다." });
+    return res.status(400).json({ success: false, message: "상세 게시물을 불러올 수 없습니다.",message: error.message });
   }
 }
 
@@ -46,11 +51,11 @@ async function postUpload(req, res, next) {
     return res.json({ post: createdPost });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ success: false, message: "실패했습니다." });
+    return res.status(400).json({ success: false, message: "게시물 업로드 Error" });
   }
 }
 
-async function postEdit (req, res, next) {
+async function postEdit(req, res, next) {
   try {
     const postId = Number(req.params.postId);
     const [existPost] = await Post.find({ postId });
@@ -94,13 +99,12 @@ async function postRomove(req, res, next) {
   }
 }
 
-async function postSearch (req, res, next) {
-    const { word } = req.params;
+async function postSearch(req, res, next) {
+  const { word } = req.params;
   const { title } = req.body;
   let postArr = [];
   try {
-
-    if(!word){
+    if (!word) {
       const posts = await Post.find({}).sort({ createAt: -1 });
       res.send(posts);
     }
@@ -116,23 +120,23 @@ async function postSearch (req, res, next) {
   }
 }
 
-async function myPage (req, res, next) {
-    const { nickname } = res.locals.user;
-  const posts = await Post.find({nickname});
+async function myPage(req, res, next) {
+  const { nickname } = res.locals.user;
+  const posts = await Post.find({ nickname });
 
   res.json({
     nickname,
-    posts
-  })
+    posts,
+  });
 }
 
 module.exports = {
-    main,
-    mainPost,
-    postDetail,
-    postUpload,
-    postEdit,
-    postRomove,
-    postSearch,
-    myPage
-}
+  main,
+  mainPost,
+  postDetail,
+  postUpload,
+  postEdit,
+  postRomove,
+  postSearch,
+  myPage,
+};

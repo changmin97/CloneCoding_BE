@@ -36,7 +36,7 @@ module.exports = (req, res, next) => {
       User.findOne({ nickname }).then((user) => {
         
         console.log(refreshtoken);
-
+        
         const myRefreshToken = verifyrefeshToken(refreshtoken);
         console.log("myRefreshToken", myRefreshToken);
         if (myRefreshToken == "jwt expired") {
