@@ -11,11 +11,11 @@ async function mainPost(req, res, next) {
     const posts = await Post.find({}).sort("-postId");
     res.send(posts);
   } catch (error) {
-    res.status(500).json(
-      { 
-        success: false, message: "메인 게시물을 불러올 수 없습니다.",
-        message: error.message
-       });
+    res.status(500).json({
+      success: false,
+      message: "메인 게시물을 불러올 수 없습니다.",
+      message: error.message,
+    });
   }
 }
 
@@ -27,7 +27,13 @@ async function postDetail(req, res, next) {
     console.log(postDetail);
     return res.status(200).json({ postDetail, existcomments });
   } catch (error) {
-    return res.status(400).json({ success: false, message: "상세 게시물을 불러올 수 없습니다.",message: error.message });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        message: "상세 게시물을 불러올 수 없습니다.",
+        message: error.message,
+      });
   }
 }
 
@@ -52,7 +58,9 @@ async function postUpload(req, res, next) {
     return res.json({ post: createdPost });
   } catch (err) {
     console.error(err);
-    return res.status(400).json({ success: false, message: "게시물을 업로드 에러" });
+    return res
+      .status(400)
+      .json({ success: false, message: "게시물을 업로드 에러" });
   }
 }
 
@@ -76,8 +84,9 @@ async function postEdit(req, res, next) {
     await Post.updateOne({ postId }, { $set: { title, content, imageUrl } });
     return res.status(200).json({ result: true });
   } catch (err) {
-    console.log(err);
-    return res.status(400).json({ success: false, message: "게시글 수정 에러" });
+    return res
+      .status(400)
+      .json({ success: false, message: "게시글 수정 에러" });
   }
 }
 
@@ -91,12 +100,18 @@ async function postRomove(req, res, next) {
     if (user.nickname) {
       return res.json({
         success: true,
-        Message: `${deletePost} "삭제되었습니다"`,
+        Message:  "게시물이 삭제되었습니다",
       });
     }
   } catch (error) {
-    console.error(error);
-    return res.status(400).json({ result: false, Message: "게시글 삭제 에러" });
+    return res
+      .status(400)
+      .json(
+        {
+        result: false,
+        Message: "게시글 삭제 에러",
+        message: error.message,
+      });
   }
 }
 
@@ -117,35 +132,45 @@ async function postSearch(req, res, next) {
     }
     return res.status(200).send(postArr);
   } catch (error) {
-    return res.status(400).json({ result: false, Message: "검색 에러" });
+    return res.status(400).json({ result: false, Message: "search Error" });
   }
 }
 
-async function myPage (req, res, next) {
+async function myPage(req, res, next) {
   const { nickname } = res.locals.user;
-  const posts = await Post.find({nickname});
-  const [targetUser] = await User.find({nickname});
-  const {bookmarkList} = targetUser
+  const posts = await Post.find({ nickname });
+  const [targetUser] = await User.find({ nickname });
+  const { bookmarkList } = targetUser;
   res.json({
     nickname,
     posts,
     bookmarkList,
-  })
+  });
 }
 
-async function addBookmark (req, res, next) {
-  try{
-    const postId = Number(req.params.postId)
-    if(!postId){
-      return res.status(400).json({ result: false, Message: "북마크할 게시글이 존재하지 않습니다." });
+async function addBookmark(req, res, next) {
+  try {
+    const postId = Number(req.params.postId);
+    if (!postId) {
+      return res
+        .status(400)
+        .json({
+          result: false,
+          Message: "북마크할 게시글이 존재하지 않습니다.",
+        });
     }
     const { nickname } = res.locals.user;
     const [targetPost] = await Post.find({ postId });
-    const {imageUrl} = targetPost
-    await User.updateOne({nickname},{$push:{bookmarkList:imageUrl}})
-    return res.json({ result : true , message : `${postId}번 사진이 북마크에 저장되었습니다.`})
-  }catch(err){
-    return res.status(400).json({ result: false, Message: "북마크저장중 오류가 났습니다." });
+    const { imageUrl } = targetPost;
+    await User.updateOne({ nickname }, { $push: { bookmarkList: imageUrl } });
+    return res.json({
+      result: true,
+      message: `${postId}번 사진이 북마크에 저장되었습니다.`,
+    });
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ result: false, Message: "북마크저장중 오류가 났습니다." });
   }
 }
 
