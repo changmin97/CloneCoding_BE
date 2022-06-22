@@ -93,16 +93,16 @@ async function postEdit(req, res, next) {
 async function postRomove(req, res, next) {
   try {
     const postId = Number(req.params.postId);
-    const { user } = res.locals;
-
-    await Post.findOneAndDelete(Number(postId));
-
-    if (user.nickname) {
-      return res.json({
-        success: true,
-        Message:  "게시물이 삭제되었습니다",
-      });
+    const [targetPost] = await Post.find({ postId })
+    const {nickname} = res.locals.user
+    
+    if(nickname !== targetPost.nickname){
+      return res.json({ result : false , message : "타인의 게시글은 삭제할 수 없습니다."})
     }
+
+    await Post.deleteOne({ postId })
+    return res.json({ result : true , message : "성공적으로 삭제되었습니다."})
+    
   } catch (error) {
     return res
       .status(400)
