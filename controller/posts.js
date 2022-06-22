@@ -120,14 +120,32 @@ async function postSearch(req, res, next) {
   }
 }
 
-async function myPage(req, res, next) {
+async function myPage (req, res, next) {
   const { nickname } = res.locals.user;
-  const posts = await Post.find({ nickname });
-
+  const posts = await Post.find({nickname});
+  const [targetUser] = await User.find({nickname});
+  const {bookmarkList} = targetUser
   res.json({
     nickname,
     posts,
-  });
+    bookmarkList,
+  })
+}
+
+async function addBookmark (req, res, next) {
+  try{
+    const postId = Number(req.params.postId)
+    if(!postId){
+      return res.status(400).json({ result: false, Message: "북마크할 게시글이 존재하지 않습니다." });
+    }
+    const { nickname } = res.locals.user;
+    const [targetPost] = await Post.find({ postId });
+    const {imageUrl} = targetPost
+    await User.updateOne({nickname},{$push:{bookmarkList:imageUrl}})
+    return res.json({ result : true , message : `${postId}번 사진이 북마크에 저장되었습니다.`})
+  }catch(err){
+    return res.status(400).json({ result: false, Message: "북마크저장중 오류가 났습니다." });
+  }
 }
 
 module.exports = {
@@ -139,4 +157,5 @@ module.exports = {
   postRomove,
   postSearch,
   myPage,
+  addBookmark,
 };

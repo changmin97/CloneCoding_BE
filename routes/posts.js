@@ -27,4 +27,7 @@ router.get("/post/search/:word", authMiddleware, postController.postSearch)
 // 마이페이지
 router.get("/mypage", authMiddleware, postController.myPage)
   
+//북마크 추가
+router.post("/post/bookmark/:postId", authMiddleware, postController.addBookmark)
+
 module.exports = router;

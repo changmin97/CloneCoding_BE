@@ -57,6 +57,7 @@ async function signup (req, res, next) {
       nickname,
       password: hashPassword,
       refreshToken: null,
+      bookmarkList: [],
     });
     await user.save();
     res.status(201).send({
