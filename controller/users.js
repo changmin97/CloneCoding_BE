@@ -9,13 +9,9 @@ const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY;
 
 // 회원가입 조건
 const signUpSchema = Joi.object({
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-    .required(),
-  nickname: Joi.string()
-    .pattern(new RegExp("^[0-9A-Za-z가-힣]{2,10}$"))
-    .required(),
-  password: Joi.string().pattern(new RegExp("^[0-9A-Za-z]{4,16}$")).required(),
+  email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] }}).required().label("이메일 형식이 유효하지 않습니다."), 
+  nickname: Joi.string().pattern(new RegExp('^[0-9A-Za-z가-힣]{2,10}$')).required().label("닉네임은 한글, 영문 대/소문자, 숫자 2~10자리여야 합니다."), 
+  password: Joi.string().pattern(new RegExp('^[0-9A-Za-z]{4,16}$')).required().label("비밀번호는 한글, 영문 대/소문자 4~16자리여야 합니다."), 
   passwordCheck: Joi.string(),
 })
 
@@ -65,7 +61,10 @@ async function signup (req, res, next) {
       result: true,
     });
   } catch (err) {
-    res.status(400).send(console.error(err));
+    res.status(400).send({ 
+      message: err.details[0].context.label, 
+      result: false, 
+    });
   }
 };
 
