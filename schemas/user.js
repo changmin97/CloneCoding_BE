@@ -5,7 +5,8 @@ const UserSchema = new Schema({
     email: {type: String, required: true, unique: true},
     nickname: {type: String, required: true, unique: true},
     password: {type: String, requried: true},
-    refreshToken: {type: String}
+    refreshToken: {type: String},
+    bookmarkList : {type : Array},
 });
 
 

@@ -1,5 +1,6 @@
 const Comment = require("../schemas/comment");
 const Post = require("../schemas/post");
+const User = require("../schemas/user");
 
 async function main(req, res, next) {
   res.json({ result: true });
