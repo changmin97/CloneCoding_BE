@@ -33,6 +33,18 @@ pinterest를 클론코딩하였습니다.
   <br>
 </div>
 
+## 🔨 개발툴
+
+-   Server: AWS EC2 (Ubuntu 18.04 LTS)
+-   Framework: Express 
+-   Database: MongoDB, Mongoose
+-   Language: Javascript
+-   Tool : Git, Notion
+-   Platform : Node.js
+
+<br/>
+<br/>
+
 
 ## 기본기능
 > 1.  로그인/회원가입
