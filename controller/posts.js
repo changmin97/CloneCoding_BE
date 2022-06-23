@@ -24,7 +24,6 @@ async function postDetail(req, res, next) {
     const postId = Number(req.params.postId);
     const postDetail = await Post.findOne({ postId });
     const existcomments = await Comment.find({ postId });
-    console.log(postDetail);
     return res.status(200).json({ postDetail, existcomments });
   } catch (error) {
     return res
