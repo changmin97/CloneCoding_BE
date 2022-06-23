@@ -31,6 +31,7 @@ pinterest를 클론코딩하였습니다.
 <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
 
   <br>
+</div>
 
 # 핵심기능
 
