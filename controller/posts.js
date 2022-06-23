@@ -140,11 +140,13 @@ async function myPage(req, res, next) {
   const { nickname } = res.locals.user;
   const posts = await Post.find({ nickname });
   const [targetUser] = await User.find({ nickname });
+  const {email} = targetUser
   const { bookmarkList } = targetUser;
   res.json({
     nickname,
     posts,
     bookmarkList,
+    email,
   });
 }
 
