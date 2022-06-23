@@ -33,7 +33,6 @@ pinterest를 클론코딩하였습니다.
   <br>
 </div>
 
-# 핵심기능
 
 ## 기본기능
 > 1.  로그인/회원가입
@@ -41,15 +40,17 @@ pinterest를 클론코딩하였습니다.
 > 2.  게시글 CRUD
 > 3.  댓글 CRUD
 > 4.  게시글 검색
+> 
 ## 추가기능
 > 1.  실시간 채팅
 > 2.  공유하기
 > 3.  보드
+> 
 노션링크
 https://nutritious-opera-139.notion.site/SA-3-0209b4ce6cd8498f9c57dcb709b7937c
 
 ## troubleshooting⛔️
->
->
->
+> duplicate key error collection : mongoDB collection 삭제 후 해결
+> [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client : 응답 중복시 발생 응답을 하나만 보내는 것으로 해결
+> 
 >
