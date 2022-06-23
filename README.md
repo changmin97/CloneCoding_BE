@@ -2,7 +2,7 @@
 pinterest를 클론코딩하였습니다.  
 이미지를 편하게 다운 받아보아요!  
 
-# 👨🏻‍🤝‍👨🏻팀원소개
+## 👨🏻‍🤝‍👨🏻팀원소개
 **BACK-END(3명)**
 *BackEnd : 정오현,정연욱,이창민  
 *Back-end Git : https://github.com/changmin97/CloneCoding_BE 
@@ -11,13 +11,26 @@ pinterest를 클론코딩하였습니다.
 *FrontEnd : 이담,이형섭  
 *Front-end Git : https://github.com/vennydev/hanghae-clone
 
-# 🔨 개발툴
-Server: AWS EC2  
-Framework: node.js  
-Database: MongoDB, firebase, s3 
-backend: Node.JS 
-frontend:Javascript,React,redux,axios  
-Tool : Git, Notion  
+## 📚 기술스택 소개
+
+<div align=center>
+
+<p align="center">
+
+<img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+<img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white"> 
+<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
+<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=express&logoColor=white">
+
+  <br>
+
+
+
+<img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white">
+
+  <br>
 
 # 핵심기능
 
